@@ -19,6 +19,7 @@
  */
 
 const sections = document.querySelectorAll('section');
+const navbar = document.querySelector('#navbar__list');
 
 /**
  * End Global Variables
@@ -26,34 +27,19 @@ const sections = document.querySelectorAll('section');
  *
  */
 
-/**
- * Filters a NodeList of section to maake sure each element is going to be an item of navbar
- * @param {NodeList} sec NodeList of sections to be filtered.
- * @returns
- */
-function filterSections(sec) {
-  const filtered = [];
-  for (let item of sec) {
-    if (item.id.includes('section')) {
-      filtered.push(item);
-    }
-  }
-  return filtered;
-}
-
 function createNavbar(sec) {
-  const parent = document.querySelector('#navbar__list');
   const fragment = document.createDocumentFragment();
-  parent.classList = 'navbar__menu';
+  navbar.classList = 'navbar__menu';
   for (let item of sec) {
     const navbarItem = document.createElement('li');
     const anchor = document.createElement('a');
     anchor.innerText = item.dataset?.nav;
+    anchor.href = '#' + item.id;
     anchor.classList = 'menu__link';
     navbarItem.appendChild(anchor);
     fragment.appendChild(navbarItem);
   }
-  parent.appendChild(fragment);
+  navbar.appendChild(fragment);
 }
 
 /**
@@ -63,8 +49,7 @@ function createNavbar(sec) {
  */
 
 // build the nav
-const filtered = filterSections(sections);
-createNavbar(filtered);
+createNavbar(sections);
 
 // Add class 'active' to section when near top of viewport
 
@@ -81,3 +66,11 @@ createNavbar(filtered);
 // Scroll to section on link click
 
 // Set sections as active
+navbar.addEventListener('click', function (e) {
+  if (e.target.nodeName === 'A') {
+    const oldActive = document.querySelector('.your-active-class');
+    const newActive = document.getElementById(e.target.href.split('#')[1]);
+    oldActive?.classList.remove('your-active-class');
+    newActive?.classList.add('your-active-class');
+  }
+});
