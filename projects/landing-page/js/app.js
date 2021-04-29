@@ -67,10 +67,16 @@ createNavbar(sections);
 
 // Set sections as active
 navbar.addEventListener('click', function (e) {
+  e.preventDefault();
   if (e.target.nodeName === 'A') {
     const oldActive = document.querySelector('.your-active-class');
     const newActive = document.getElementById(e.target.href.split('#')[1]);
     oldActive?.classList.remove('your-active-class');
     newActive?.classList.add('your-active-class');
+    const offsetTop = newActive.offsetTop;
+    scroll({
+      top: offsetTop,
+      behavior: 'smooth',
+    });
   }
 });
