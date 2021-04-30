@@ -20,6 +20,8 @@
 
 const sections = document.querySelectorAll('section');
 const navbar = document.querySelector('#navbar__list');
+const scrollToTopButton = document.getElementById('top');
+const rootElement = document.documentElement;
 
 /**
  * End Global Variables
@@ -41,6 +43,53 @@ function createNavbar(sec) {
   }
   navbar.appendChild(fragment);
 }
+
+const showTopButton = function () {
+  const y = window.scrollY;
+  if (y > 0) {
+    scrollToTopButton.classList.remove('hidden');
+  } else {
+    scrollToTopButton.classList.add('hidden');
+  }
+};
+
+const scrollChangeSection = function () {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const id = entry.target.getAttribute('id');
+      if (entry.intersectionRatio > 0.002) {
+        document.querySelector(`nav li a[href="#${id}"]`).focus();
+      }
+    });
+  });
+  sections.forEach((section) => {
+    observer.observe(section);
+  });
+};
+
+const clickChangeSection = function (e) {
+  e.preventDefault();
+  if (e.target.nodeName === 'A') {
+    const oldActiveSection = document.querySelector('.your-active-class');
+    const newActiveSection = document.getElementById(
+      e.target.href.split('#')[1]
+    );
+    oldActiveSection?.classList.remove('your-active-class');
+    newActiveSection?.classList.add('your-active-class');
+    const offsetTop = newActiveSection.offsetTop;
+    scroll({
+      top: offsetTop,
+      behavior: 'smooth',
+    });
+  }
+};
+
+const scrollToTop = function () {
+  rootElement.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
+};
 
 /**
  * End Helper Functions
@@ -64,19 +113,11 @@ createNavbar(sections);
 // Build menu
 
 // Scroll to section on link click
+window.addEventListener('DOMContentLoaded', scrollChangeSection);
 
 // Set sections as active
-navbar.addEventListener('click', function (e) {
-  e.preventDefault();
-  if (e.target.nodeName === 'A') {
-    const oldActive = document.querySelector('.your-active-class');
-    const newActive = document.getElementById(e.target.href.split('#')[1]);
-    oldActive?.classList.remove('your-active-class');
-    newActive?.classList.add('your-active-class');
-    const offsetTop = newActive.offsetTop;
-    scroll({
-      top: offsetTop,
-      behavior: 'smooth',
-    });
-  }
-});
+navbar.addEventListener('click', clickChangeSection);
+
+// Button TOP
+window.addEventListener('scroll', showTopButton);
+scrollToTopButton.addEventListener('click', scrollToTop);
