@@ -113,11 +113,11 @@ createNavbar(sections);
 // Build menu
 
 // Scroll to section on link click
-window.addEventListener('DOMContentLoaded', scrollChangeSection);
+document.addEventListener('DOMContentLoaded', scrollChangeSection);
 
 // Set sections as active
 navbar.addEventListener('click', clickChangeSection);
 
 // Button TOP
-window.addEventListener('scroll', showTopButton);
+document.addEventListener('scroll', showTopButton);
 scrollToTopButton.addEventListener('click', scrollToTop);
