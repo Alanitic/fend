@@ -29,10 +29,14 @@ const rootElement = document.documentElement;
  *
  */
 
+/**
+ * Creates a navbar with the NodeList received
+ * @param { NodeList } sec Items to create the navbar
+ */
 function createNavbar(sec) {
   const fragment = document.createDocumentFragment();
   navbar.classList = 'navbar__menu';
-  for (let item of sec) {
+  sec.forEach((item) => {
     const navbarItem = document.createElement('li');
     const anchor = document.createElement('a');
     anchor.innerText = item.dataset?.nav;
@@ -40,11 +44,14 @@ function createNavbar(sec) {
     anchor.classList = 'menu__link';
     navbarItem.appendChild(anchor);
     fragment.appendChild(navbarItem);
-  }
+  });
   navbar.appendChild(fragment);
 }
 
-const showTopButton = function () {
+/**
+ * Handles scroll event on the entire document and shows the button to scroll on top of the page
+ */
+const showTopButton = () => {
   const y = window.scrollY;
   if (y > 0) {
     scrollToTopButton.classList.remove('hidden');
@@ -53,7 +60,10 @@ const showTopButton = function () {
   }
 };
 
-const scrollChangeSection = function () {
+/**
+ * Handles DOMContentLoaded event and observe when viewport matches the sections
+ */
+const scrollChangeSection = () => {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       const id = entry.target.getAttribute('id');
@@ -67,7 +77,11 @@ const scrollChangeSection = function () {
   });
 };
 
-const clickChangeSection = function (e) {
+/**
+ * Handles click event on nav items and scroll viewport to the selected section
+ * @param {MouseEvent} e Mouse event interface
+ */
+const clickChangeSection = (e) => {
   e.preventDefault();
   if (e.target.nodeName === 'A') {
     const oldActiveSection = document.querySelector('.your-active-class');
@@ -84,7 +98,10 @@ const clickChangeSection = function (e) {
   }
 };
 
-const scrollToTop = function () {
+/**
+ * Handles click event on Top button and scroll viewport to the begining of page
+ */
+const scrollToTop = () => {
   rootElement.scrollTo({
     top: 0,
     behavior: 'smooth',
