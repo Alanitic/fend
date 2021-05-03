@@ -28,13 +28,12 @@ function listening() {
 }
 
 // GET data
-app.get('/', (req, res) => {
+app.get('/weather', (req, res) => {
   res.send(projectData);
 });
 
 // POST
-app.post('/', (req, res) => {
-  const { temperature, date } = req.body;
-  console.log(req.body);
+app.post('/weather', (req, res) => {
+  projectData = req.body;
   res.send(req.body);
 });

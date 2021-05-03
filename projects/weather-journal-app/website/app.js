@@ -2,8 +2,9 @@
 // API
 const apiURL = 'http://api.openweathermap.org/data/2.5/weather';
 const apiKey = '093885a1f0cdfbb57c61d5b507b63ddc';
+// const apiKey = '093885a1f0cdfbb57c61d5b07b63ddc';
 // Server
-const serverUrl = 'http://localhost:3000/';
+const serverUrl = 'http://localhost:3000/weather';
 // User data
 const btnGenerate = document.getElementById('generate');
 const zipCode = document.getElementById('zip');
@@ -22,23 +23,28 @@ btnGenerate.addEventListener('click', () => {
     const urlReq = `${apiURL}?zip=${zipCode.value},us&appid=${apiKey}`;
     getPost(urlReq);
   } else {
-    console.log('invalid zip code');
+    alert('Please provide a valid zipcode');
   }
 });
 
 const getPost = (url) => {
-  retrieveData(url).then((data) => {
-    const { temp } = data.main;
-    const newData = {
-      temp,
-      newDate,
-      feelings: feelings.value,
-    };
-    postData(serverUrl, newData);
-  });
+  retrieveData(url)
+    .then((data) => {
+      const { temp } = data.main;
+      const newData = {
+        temp,
+        newDate,
+        feelings: feelings.value,
+      };
+      postData(serverUrl, newData).then(() => {
+        updateUI();
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
-// Example api.openweathermap.org/data/2.5/weather?zip=94040,us&appid=093885a1f0cdfbb57c61d5b507b63ddc
 const retrieveData = async (url = '') => {
   const request = await fetch(url);
   try {
@@ -47,7 +53,6 @@ const retrieveData = async (url = '') => {
     return allData;
   } catch (error) {
     console.log('error', error);
-    // appropriately handle the error
   }
 };
 
@@ -67,6 +72,15 @@ const postData = async (url = '', data = {}) => {
   } catch (error) {
     console.log('error', error);
   }
+};
+
+const updateUI = async () => {
+  const { temp: temperature, newDate, feelings } = await retrieveData(
+    serverUrl
+  );
+  date.innerText = newDate;
+  content.innerText = feelings;
+  temp.innerText = temperature;
 };
 
 function isValidUSZip(sZip) {
