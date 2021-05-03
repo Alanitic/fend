@@ -26,3 +26,15 @@ function listening() {
   // console.log(server);
   console.log(`running on localhost: ${port}`);
 }
+
+// GET data
+app.get('/', (req, res) => {
+  res.send(projectData);
+});
+
+// POST
+app.post('/', (req, res) => {
+  const { temperature, date } = req.body;
+  console.log(req.body);
+  res.send(req.body);
+});
