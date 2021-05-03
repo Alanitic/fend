@@ -35,5 +35,5 @@ app.get('/weather', (req, res) => {
 // POST
 app.post('/weather', (req, res) => {
   projectData = req.body;
-  res.send(req.body);
+  res.send({ success: true });
 });
