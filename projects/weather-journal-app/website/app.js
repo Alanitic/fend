@@ -1,8 +1,7 @@
 /* Global Variables */
 // API
 const apiURL = 'http://api.openweathermap.org/data/2.5/weather';
-const apiKey = '093885a1f0cdfbb57c61d5b507b63ddc';
-// const apiKey = '093885a1f0cdfbb57c61d5b07b63ddc';
+const apiKey = '093885a1f0cdfbb57c61d5b507b63ddc&units=imperial';
 // Server
 const serverUrl = 'http://localhost:3000/weather';
 // User data
@@ -15,8 +14,9 @@ const temp = document.getElementById('temp');
 const content = document.getElementById('content');
 
 // Create a new date instance dynamically with JS
-let d = new Date();
-let newDate = d.getMonth() + '.' + d.getDate() + '.' + d.getFullYear();
+let day = new Date();
+let newDate =
+  day.getMonth() + 1 + '/' + day.getDate() + '/' + day.getFullYear();
 
 btnGenerate.addEventListener('click', () => {
   if (isValidUSZip(zipCode.value)) {
@@ -31,6 +31,7 @@ const getPost = (url) => {
   retrieveData(url)
     .then((data) => {
       const { temp } = data.main;
+      console.log(data.main);
       const newData = {
         temp,
         newDate,
@@ -78,9 +79,9 @@ const updateUI = async () => {
   const { temp: temperature, newDate, feelings } = await retrieveData(
     serverUrl
   );
-  date.innerText = newDate;
-  content.innerText = feelings;
-  temp.innerText = temperature;
+  date.innerHTML = newDate;
+  content.innerHTML = feelings;
+  temp.innerHTML = temperature;
 };
 
 function isValidUSZip(sZip) {
